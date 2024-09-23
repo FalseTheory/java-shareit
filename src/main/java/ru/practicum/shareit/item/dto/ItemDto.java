@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -7,4 +8,8 @@ import lombok.Data;
  */
 @Data
 public class ItemDto {
+    @NotNull
+    String name;
+    String description;
+    boolean available;
 }

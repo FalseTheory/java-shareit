@@ -12,6 +12,6 @@ public class Item {
     String name;
     String description;
     int timesRented;
-    boolean isBooked;
+    boolean available;
     Long bookingId;
 }
