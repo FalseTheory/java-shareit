@@ -22,8 +22,8 @@ public final class UserMapper {
         User user = new User();
 
         user.setId(userDto.getId());
-        user.setEmail(user.getEmail());
-        user.setName(user.getName());
+        user.setEmail(userDto.getEmail());
+        user.setName(userDto.getName());
 
         return user;
     }

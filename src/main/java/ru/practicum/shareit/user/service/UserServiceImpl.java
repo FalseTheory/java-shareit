@@ -1,6 +1,5 @@
 package ru.practicum.shareit.user.service;
 
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -44,14 +43,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto userDto) {
-        if(userDto.getId()==null) {
-            throw new ValidationException("Должен быть указан ID");
-        }
-        User updatedUser = userRepository.getById(userDto.getId())
-                .orElseThrow(()->new NotFoundException("Пользователь с ID = " + userDto.getId() + " не найден"));
-        updatedUser.setName(userDto.getName());
-        updatedUser.setEmail(userDto.getEmail());
-        updatedUser = userRepository.update(updatedUser);
+        User user = UserMapper.mapToUser(userDto);
+        userRepository.getById(userDto.getId())
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID = " + userDto.getId() + " не найден"));
+
+        User updatedUser;
+        updatedUser = userRepository.update(user);
 
         return UserMapper.mapToUserDto(updatedUser);
     }

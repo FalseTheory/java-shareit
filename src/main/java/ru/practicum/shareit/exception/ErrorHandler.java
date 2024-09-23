@@ -21,6 +21,13 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, String> conflictException(final ConflictException e) {
+        log.info("Conflicting data {}", e.getMessage());
+        return Map.of("error", e.getMessage());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> validationException(final ValidationException e) {
         log.info("Validation Exception {}", e.getMessage());
@@ -33,6 +40,7 @@ public class ErrorHandler {
         log.warn("Непредвиденная ошибка", e.getCause());
         return Map.of("Unexpected error", e.getMessage());
     }
+
 
 
 }
