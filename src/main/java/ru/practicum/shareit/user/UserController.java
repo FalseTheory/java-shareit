@@ -1,12 +1,14 @@
 package ru.practicum.shareit.user;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserUpdateDto;
 import ru.practicum.shareit.user.service.UserService;
-import ru.practicum.shareit.validators.OnCreate;
 
 import java.util.List;
 
@@ -14,32 +16,44 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping
-    public UserDto create(@RequestBody @Validated(OnCreate.class) UserDto user) {
-        return userService.create(user);
+    public UserDto create(@RequestBody @Valid UserCreateDto userCreateDto) {
+        log.info("creating user - {}", userCreateDto);
+        UserDto userDto = userService.create(userCreateDto);
+        log.info("user creating successful");
+        return userDto;
     }
+
     @GetMapping("/{userId}")
-    public UserDto getUserById(@PathVariable Long userId) {
+    public UserDto getUserById(@Positive @PathVariable Long userId) {
+        log.info("getting user with id - {}", userId);
         return userService.get(userId);
     }
+
     @GetMapping
     public List<UserDto> getAll() {
+        log.info("getting all users");
         return userService.getAll();
     }
 
     @PatchMapping("/{userId}")
-    public UserDto update(@PathVariable Long userId,
-                          @RequestBody @Valid UserDto user) {
-        user.setId(userId);
-        return userService.update(user);
+    public UserDto update(@Positive @PathVariable Long userId,
+                          @RequestBody UserUpdateDto userUpdateDto) {
+        userUpdateDto.setId(userId);
+        log.info("trying to update user - {}",userUpdateDto);
+        UserDto userDto = userService.update(userUpdateDto);
+        log.info("update successful");
+        return userDto;
     }
 
     @DeleteMapping("/{userId}")
-    public boolean delete(@PathVariable Long userId) {
+    public boolean delete(@Positive @PathVariable Long userId) {
+        log.info("deleting user with id - {}", userId);
         return userService.delete(userId);
     }
 }

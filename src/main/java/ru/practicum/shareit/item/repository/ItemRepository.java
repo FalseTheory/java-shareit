@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface ItemRepository {
 
-    Item create(Item item, Long userId);
+    Item create(Item item);
 
     Optional<Item> getById(Long itemId);
 
-    Item update(Long userId, Item item);
+    Item update(Item item);
 
     List<Item> getUserItems(Long userId);
 

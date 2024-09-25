@@ -37,10 +37,9 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleUnexpectedException(final Exception e) {
-        log.warn("Непредвиденная ошибка", e.getCause());
+        log.warn("Непредвиденная ошибка", e);
         return Map.of("Unexpected error", e.getMessage());
     }
-
 
 
 }

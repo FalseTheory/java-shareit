@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserUpdateDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -16,41 +18,42 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper mapper;
 
 
     @Override
-    public UserDto create(UserDto userDto) {
-        User user = UserMapper.mapToUser(userDto);
+    public UserDto create(UserCreateDto userDto) {
+        User user = mapper.mapCreateDtoToUser(userDto);
 
         user = userRepository.create(user);
 
-        return UserMapper.mapToUserDto(user);
+        return mapper.mapToUserDto(user);
     }
 
     @Override
     public UserDto get(Long userId) {
         return userRepository.getById(userId)
-                .map(UserMapper::mapToUserDto)
-                .orElseThrow(()->new NotFoundException("Пользователь с ID = " + userId + " не найден"));
+                .map(mapper::mapToUserDto)
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID = " + userId + " не найден"));
     }
 
     @Override
     public List<UserDto> getAll() {
         return userRepository.getAll().stream()
-                .map(UserMapper::mapToUserDto)
+                .map(mapper::mapToUserDto)
                 .toList();
     }
 
     @Override
-    public UserDto update(UserDto userDto) {
-        User user = UserMapper.mapToUser(userDto);
+    public UserDto update(UserUpdateDto userDto) {
+        User user = mapper.mapUpdateDtoToUser(userDto);
         userRepository.getById(userDto.getId())
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID = " + userDto.getId() + " не найден"));
 
         User updatedUser;
         updatedUser = userRepository.update(user);
 
-        return UserMapper.mapToUserDto(updatedUser);
+        return mapper.mapToUserDto(updatedUser);
     }
 
     @Override

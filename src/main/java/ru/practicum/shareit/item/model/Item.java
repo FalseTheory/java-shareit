@@ -2,16 +2,13 @@ package ru.practicum.shareit.item.model;
 
 import lombok.Data;
 
-/**
- * TODO Sprint add-controllers.
- */
 
 @Data
 public class Item {
-    Long id;
+    long id;
     String name;
     String description;
-    Long ownerId;
+    long ownerId;
     int timesRented;
     Boolean available;
     Long bookingId;

@@ -1,26 +1,34 @@
 package ru.practicum.shareit.item.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.*;
 
 @Repository
-public class ItemRepositoryImpl implements ItemRepository{
+@Slf4j
+public class ItemRepositoryImpl implements ItemRepository {
 
-    private final Map<Long, Item> items;
-    private long idCount;
+    private final Map<Long, Item> items = new HashMap<>();
 
-    public ItemRepositoryImpl() {
-        items = new HashMap<>();
-        idCount = 0;
-    }
+    private final Map<Long, List<Item>> usersItems = new HashMap<>();
+    private long idCount = 0;
+
 
     @Override
-    public Item create(Item item, Long userId) {
-        item.setOwnerId(userId);
+    public Item create(Item item) {
         item.setId(++idCount);
         items.put(item.getId(), item);
+        List<Item> userItems = usersItems.get(item.getOwnerId());
+        if (userItems == null) {
+            userItems = new ArrayList<>();
+            userItems.add(item);
+            usersItems.put(item.getOwnerId(), userItems);
+        } else {
+            userItems.add(item);
+        }
+
         return item;
     }
 
@@ -30,15 +38,15 @@ public class ItemRepositoryImpl implements ItemRepository{
     }
 
     @Override
-    public Item update(Long userId, Item item) {
+    public Item update(Item item) {
         Item updatedItem = items.get(item.getId());
-        if(item.getDescription()!=null) {
+        if (item.getDescription() != null) {
             updatedItem.setDescription(item.getDescription());
         }
-        if(item.getAvailable()!=null) {
+        if (item.getAvailable() != null) {
             updatedItem.setAvailable(item.getAvailable());
         }
-        if(item.getName()!=null) {
+        if (item.getName() != null) {
             updatedItem.setName(item.getName());
         }
         return updatedItem;
@@ -47,20 +55,18 @@ public class ItemRepositoryImpl implements ItemRepository{
 
     @Override
     public List<Item> getUserItems(Long userId) {
-        return items.values().stream()
-                .filter(item -> Objects.equals(item.getOwnerId(), userId))
-                .toList();
+        return usersItems.get(userId);
     }
 
     @Override
     public List<Item> search(Long userId, String text) {
-        if(text.isEmpty()){
+        if (text.isEmpty()) {
             return Collections.emptyList();
         }
         return items.values().stream()
                 .filter(item ->
-                        (item.getDescription().contains(text)
-                                || item.getName().contains(text)))
+                        ((item.getDescription().toLowerCase().contains(text.toLowerCase())
+                                || item.getName().toLowerCase().contains(text.toLowerCase()))) && item.getAvailable())
                 .toList();
     }
 }
