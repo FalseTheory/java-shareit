@@ -6,10 +6,8 @@ import lombok.Data;
 
 @Data
 public class ItemCreateDto {
-    @NotNull
     @NotBlank
     String name;
-    @NotNull
     @NotBlank
     String description;
     @NotNull

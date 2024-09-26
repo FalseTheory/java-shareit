@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class UserCreateDto {
-    @NotNull
     @NotBlank
     String name;
     @Email

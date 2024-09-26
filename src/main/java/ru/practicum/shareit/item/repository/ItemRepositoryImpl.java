@@ -20,11 +20,11 @@ public class ItemRepositoryImpl implements ItemRepository {
     public Item create(Item item) {
         item.setId(++idCount);
         items.put(item.getId(), item);
-        List<Item> userItems = usersItems.get(item.getOwnerId());
+        List<Item> userItems = usersItems.get(item.getOwner().getId());
         if (userItems == null) {
             userItems = new ArrayList<>();
             userItems.add(item);
-            usersItems.put(item.getOwnerId(), userItems);
+            usersItems.put(item.getOwner().getId(), userItems);
         } else {
             userItems.add(item);
         }
@@ -39,17 +39,9 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item update(Item item) {
-        Item updatedItem = items.get(item.getId());
-        if (item.getDescription() != null) {
-            updatedItem.setDescription(item.getDescription());
-        }
-        if (item.getAvailable() != null) {
-            updatedItem.setAvailable(item.getAvailable());
-        }
-        if (item.getName() != null) {
-            updatedItem.setName(item.getName());
-        }
-        return updatedItem;
+        items.put(item.getId(), item);
+
+        return item;
 
     }
 
