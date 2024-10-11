@@ -25,38 +25,44 @@ public class UserServiceImpl implements UserService {
     public UserDto create(UserCreateDto userDto) {
         User user = mapper.mapCreateDtoToUser(userDto);
 
-        user = userRepository.create(user);
+        user = userRepository.save(user);
 
         return mapper.mapToUserDto(user);
     }
 
     @Override
     public UserDto get(Long userId) {
-        return userRepository.getById(userId)
+        return userRepository.findById(userId)
                 .map(mapper::mapToUserDto)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID = " + userId + " не найден"));
     }
 
     @Override
     public List<UserDto> getAll() {
-        return userRepository.getAll().stream()
+        return userRepository.findAll().stream()
                 .map(mapper::mapToUserDto)
                 .toList();
     }
 
     @Override
     public UserDto update(UserUpdateDto userDto) {
-        User user = mapper.mapUpdateDtoToUser(userDto);
-        userRepository.getById(userDto.getId())
+        User updatedUser = userRepository.findById(userDto.getId())
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID = " + userDto.getId() + " не найден"));
 
-        User updatedUser = userRepository.update(user);
 
-        return mapper.mapToUserDto(updatedUser);
+        if(userDto.getName()!=null) {
+            updatedUser.setName(userDto.getName());
+        }
+        if(userDto.getEmail()!=null) {
+            updatedUser.setEmail(userDto.getEmail());
+        }
+
+
+        return mapper.mapToUserDto(userRepository.save(updatedUser));
     }
 
     @Override
-    public boolean delete(Long userId) {
-        return userRepository.delete(userId);
+    public void delete(Long userId) {
+        userRepository.deleteById(userId);
     }
 }
