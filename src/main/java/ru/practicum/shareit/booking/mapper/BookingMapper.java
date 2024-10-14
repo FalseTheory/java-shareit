@@ -13,6 +13,8 @@ public interface BookingMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "booker", ignore = true)
+    @Mapping(target = "item", ignore = true)
+    @Mapping(target = "status", ignore = true)
     Booking mapCreateDtoToBooking(BookingCreateDto bookingCreateDto);
 
     BookingDto mapToBookingDto(Booking booking);

@@ -10,8 +10,6 @@ import ru.practicum.shareit.user.User;
 @Setter
 @NoArgsConstructor
 @Table(name = "items")
-/*@NamedEntityGraph(name = "item.owner",
-attributeNodes = @NamedAttributeNode("owner"))*/
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +18,7 @@ public class Item {
     String name;
     @Column(nullable = false)
     String description;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     User owner;
     @Column(nullable = false)

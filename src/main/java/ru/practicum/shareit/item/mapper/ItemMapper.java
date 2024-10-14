@@ -10,6 +10,9 @@ import ru.practicum.shareit.item.model.Item;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ItemMapper {
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "lastBooking", ignore = true)
+    @Mapping(target = "nextBooking", ignore = true)
     ItemDto mapToItemDto(Item item);
 
     @Mapping(target = "id", ignore = true)

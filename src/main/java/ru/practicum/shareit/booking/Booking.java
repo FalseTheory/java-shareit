@@ -13,16 +13,14 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "bookings")
-/*@NamedEntityGraph(name = "booking_entity_graph",
-attributeNodes = {@NamedAttributeNode("item"), @NamedAttributeNode("booker")} )*/
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     Item item;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booker_id")
     User booker;
     @Column(nullable = false)
