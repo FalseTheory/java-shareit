@@ -1,13 +1,17 @@
 package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import ru.practicum.shareit.user.User;
 
 
-@Data
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "items")
+/*@NamedEntityGraph(name = "item.owner",
+attributeNodes = @NamedAttributeNode("owner"))*/
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +20,7 @@ public class Item {
     String name;
     @Column(nullable = false)
     String description;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
     User owner;
     @Column(nullable = false)

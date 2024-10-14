@@ -11,7 +11,9 @@ import ru.practicum.shareit.user.dto.UserUpdateDto;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
     UserDto mapToUserDto(User user);
+
     @Mapping(target = "id", ignore = true)
     User mapCreateDtoToUser(UserCreateDto userDto);
+
     User mapUpdateDtoToUser(UserUpdateDto userUpdateDto);
 }

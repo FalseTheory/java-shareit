@@ -10,8 +10,8 @@ public enum BookingStatus {
     ALL;
 
     static BookingStatus fromString(String status) {
-        for(BookingStatus val : BookingStatus.values()) {
-            if(val.name().equals(status)) {
+        for (BookingStatus val : BookingStatus.values()) {
+            if (val.name().equals(status)) {
                 return val;
             }
         }
