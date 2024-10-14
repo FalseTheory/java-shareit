@@ -50,10 +50,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID = " + userDto.getId() + " не найден"));
 
 
-        if(userDto.getName()!=null) {
+        if (userDto.getName() != null) {
             updatedUser.setName(userDto.getName());
         }
-        if(userDto.getEmail()!=null) {
+        if (userDto.getEmail() != null) {
             updatedUser.setEmail(userDto.getEmail());
         }
 
