@@ -5,6 +5,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
@@ -67,6 +69,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BookingDto getBooking(Long userId, Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Букинг с id - " + bookingId + " не найден"));
@@ -77,9 +80,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getOwnerBookings(Long userId) {
+    @Transactional(readOnly = true)
+    public List<BookingDto> getOwnerBookings(Long userId, BookingStatus state) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователя с id - " + userId + " не найдено"));
+
+        if (state != BookingStatus.ALL) {
+            return bookingRepository.findOwnerBookings(userId, state).stream()
+                    .map(mapper::mapToBookingDto)
+                    .collect(Collectors.toList());
+        }
 
         return bookingRepository.findOwnerBookings(userId).stream()
                 .map(mapper::mapToBookingDto)
@@ -87,9 +97,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getUserBookings(Long userId) {
+    @Transactional(readOnly = true)
+    public List<BookingDto> getUserBookings(Long userId, BookingStatus state) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователя с id - " + userId + " не найдено"));
+
+        if (state != BookingStatus.ALL) {
+            return bookingRepository.findUserBookings(userId, state).stream()
+                    .map(mapper::mapToBookingDto)
+                    .collect(Collectors.toList());
+        }
 
         return bookingRepository.findUserBookings(userId).stream()
                 .map(mapper::mapToBookingDto)

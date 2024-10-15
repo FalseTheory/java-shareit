@@ -20,7 +20,7 @@ public class Comment {
     Long id;
     @Column(nullable = false)
     String text;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     User author;
     @ManyToOne(fetch = FetchType.LAZY)
