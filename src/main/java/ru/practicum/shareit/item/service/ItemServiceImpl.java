@@ -26,11 +26,9 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ItemServiceImpl implements ItemService {
 
     private final UserRepository userRepository;
@@ -41,6 +39,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentMapper commentMapper;
 
     @Override
+    @Transactional
     public ItemDto create(ItemCreateDto itemDto) {
         User user = userRepository.findById(itemDto.getOwnerId())
                 .orElseThrow(() -> new NotFoundException("Пользователь с id - " + itemDto.getOwnerId() + " не найден"));
@@ -52,20 +51,24 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public ItemDto getById(Long itemId) {
+    public ItemDto getById(Long itemId, Long userId) {
+        return itemRepository.findById(itemId)
+                .map(item -> {
+                            List<Booking> bookings = null;
+                            if (item.getOwner().getId().equals(userId)) {
+                                bookings = bookingRepository.findBookingsForItem(itemId);
+                            }
+                            return itemMapper.mapToItemDto(item, bookings,
+                                    commentRepository.findItemComments(item.getId()).stream()
+                                            .map(commentMapper::mapToCommentDto).toList());
+                        }
 
-        ItemDto itemDto = itemRepository.findById(itemId)
-                .map(itemMapper::mapToItemDto)
+                )
                 .orElseThrow(() -> new NotFoundException("Предмет с id - " + itemId + " не найден"));
-        itemDto.setComments(commentRepository.findItemComments(itemId).stream()
-                .map(commentMapper::mapToCommentDto)
-                .collect(Collectors.toList()));
-
-
-        return itemDto;
     }
 
     @Override
+    @Transactional
     public ItemDto update(ItemUpdateDto itemDto) {
         userRepository.findById(itemDto.getOwnerId())
                 .orElseThrow(() -> new NotFoundException("Пользователь с id - " + itemDto.getOwnerId() + " не найден"));
@@ -92,6 +95,9 @@ public class ItemServiceImpl implements ItemService {
         List<Item> items = itemRepository.getUserItems(userId);
         List<Long> ids = items.stream().map(Item::getId).toList();
         List<Booking> bookingList = bookingRepository.findOwnerBookings(userId);
+        List<CommentDto> commentList = commentRepository.findAllById(ids).stream()
+                .map(commentMapper::mapToCommentDto)
+                .toList();
         Map<Long, List<Booking>> bookingsMap = new HashMap<>();
         for (Long id : ids) {
             bookingsMap.put(id, new ArrayList<>());
@@ -104,7 +110,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return itemRepository.getUserItems(userId).stream()
-                .map(item -> itemMapper.mapToItemDto(item, bookingsMap.get(item.getId())))
+                .map(item -> itemMapper.mapToItemDto(item, bookingsMap.get(item.getId()), commentList))
                 .toList();
     }
 
@@ -117,6 +123,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public CommentDto postComment(CommentCreateDto commentCreateDto) {
         LocalDateTime now = LocalDateTime.now();
         User user = userRepository.findById(commentCreateDto.getUserId())

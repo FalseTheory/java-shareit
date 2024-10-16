@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
@@ -19,10 +20,11 @@ public interface ItemMapper {
     @Mapping(target = "nextBooking", ignore = true)
     ItemDto mapToItemDto(Item item);
 
-    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "comments", source = "commentDtoList")
     @Mapping(target = "lastBooking", expression = "java(getLastBooking(bookings))")
     @Mapping(target = "nextBooking", expression = "java(getNextBooking(bookings))")
-    ItemDto mapToItemDto(Item item, List<Booking> bookings);
+    ItemDto mapToItemDto(Item item, List<Booking> bookings, List<CommentDto> commentDtoList);
+
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "owner", ignore = true)
@@ -31,7 +33,11 @@ public interface ItemMapper {
     @Mapping(target = "owner", ignore = true)
     Item mapUpdateDtoToItem(ItemUpdateDto itemUpdateDto);
 
+
     default ItemDto.BookingShortDto getNextBooking(List<Booking> bookings) {
+        if (bookings == null) {
+            return null;
+        }
         LocalDateTime now = LocalDateTime.now();
         Booking nextBooking = null;
         for (Booking booking : bookings) {
@@ -48,6 +54,9 @@ public interface ItemMapper {
     }
 
     default ItemDto.BookingShortDto getLastBooking(List<Booking> bookings) {
+        if (bookings == null) {
+            return null;
+        }
         LocalDateTime now = LocalDateTime.now();
         Booking lastBooking = null;
         for (Booking booking : bookings) {

@@ -24,6 +24,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b " +
             "from Booking as b " +
             "join b.item as it " +
+            "where it.id = ?1")
+    List<Booking> findBookingsForItem(Long itemId);
+
+    @Query("select b " +
+            "from Booking as b " +
+            "join b.item as it " +
             "join it.owner as o " +
             "where o.id = ?1 and b.status = ?2 " +
             "order by b.start desc")
@@ -36,6 +42,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "order by b.start desc")
     @EntityGraph(attributePaths = {"item", "item.owner", "booker"})
     List<Booking> findUserBookings(Long userId);
+
 
     @Query("select b " +
             "from Booking as b " +

@@ -7,6 +7,7 @@ public enum BookingStatus {
     PAST,
     FUTURE,
     CURRENT,
+    CANCELED,
     ALL
 
 }

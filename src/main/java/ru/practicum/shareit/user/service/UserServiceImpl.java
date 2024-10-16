@@ -16,7 +16,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -24,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public UserDto create(UserCreateDto userDto) {
         User user = mapper.mapCreateDtoToUser(userDto);
 
@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto update(UserUpdateDto userDto) {
         User updatedUser = userRepository.findById(userDto.getId())
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID = " + userDto.getId() + " не найден"));
@@ -66,6 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(Long userId) {
         userRepository.deleteById(userId);
     }
