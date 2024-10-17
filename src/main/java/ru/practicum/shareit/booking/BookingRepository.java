@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,8 +18,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "from Booking as b " +
             "join b.item as it " +
             "join it.owner as o " +
-            "where o.id = ?1 " +
-            "order by b.start desc")
+            "where o.id = ?1")
+    List<Booking> findOwnerBookings(Long userId, Sort sort);
+
+    @Query("select b " +
+            "from Booking as b " +
+            "join b.item as it " +
+            "join it.owner as o " +
+            "where o.id = ?1")
     List<Booking> findOwnerBookings(Long userId);
 
     @Query("select b " +
@@ -31,15 +38,21 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "from Booking as b " +
             "join b.item as it " +
             "join it.owner as o " +
-            "where o.id = ?1 and b.status = ?2 " +
-            "order by b.start desc")
-    List<Booking> findOwnerBookings(Long userId, BookingStatus state);
+            "where o.id = ?1 and b.status = ?2")
+    List<Booking> findOwnerBookings(Long userId, BookingState state, Sort sort);
+
 
     @Query("select b " +
             "from Booking as b " +
             "join b.booker as bkr " +
-            "where bkr.id = ?1 " +
-            "order by b.start desc")
+            "where bkr.id = ?1")
+    @EntityGraph(attributePaths = {"item", "item.owner", "booker"})
+    List<Booking> findUserBookings(Long userId, Sort sort);
+
+    @Query("select b " +
+            "from Booking as b " +
+            "join b.booker as bkr " +
+            "where bkr.id = ?1")
     @EntityGraph(attributePaths = {"item", "item.owner", "booker"})
     List<Booking> findUserBookings(Long userId);
 
@@ -47,10 +60,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b " +
             "from Booking as b " +
             "join b.booker as bkr " +
-            "where bkr.id = ?1 and b.status = ?2 " +
-            "order by b.start desc")
+            "where bkr.id = ?1 and b.status = ?2")
     @EntityGraph(attributePaths = {"item", "item.owner", "booker"})
-    List<Booking> findUserBookings(Long userId, BookingStatus state);
+    List<Booking> findUserBookings(Long userId, BookingState state, Sort sort);
 
 
 }
