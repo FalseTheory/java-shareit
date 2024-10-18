@@ -92,11 +92,17 @@ public class BookingServiceImpl implements BookingService {
         LocalDateTime now = LocalDateTime.now();
 
         return switch (state) {
-            case REJECTED, WAITING -> bookingRepository.findOwnerBookings(userId, state,
+            case WAITING -> bookingRepository.findOwnerBookings(userId, List.of(BookingStatus.WAITING),
                             Sort.by(Sort.Direction.DESC, "start"))
                     .stream()
                     .map(mapper::mapToBookingDto)
                     .collect(Collectors.toList());
+            case REJECTED ->
+                    bookingRepository.findOwnerBookings(userId, List.of(BookingStatus.CANCELED, BookingStatus.REJECTED),
+                                    Sort.by(Sort.Direction.DESC, "start"))
+                            .stream()
+                            .map(mapper::mapToBookingDto)
+                            .collect(Collectors.toList());
             case PAST -> bookingRepository.findOwnerBookings(userId, Sort.by(Sort.Direction.DESC, "start"))
                     .stream()
                     .filter(booking -> booking.getEnd().isBefore(now)
@@ -135,11 +141,17 @@ public class BookingServiceImpl implements BookingService {
 
         LocalDateTime now = LocalDateTime.now();
         return switch (state) {
-            case REJECTED, WAITING -> bookingRepository.findUserBookings(userId, state,
+            case WAITING -> bookingRepository.findUserBookings(userId, List.of(BookingStatus.WAITING),
                             Sort.by(Sort.Direction.DESC, "start"))
                     .stream()
                     .map(mapper::mapToBookingDto)
                     .collect(Collectors.toList());
+            case REJECTED ->
+                    bookingRepository.findUserBookings(userId, List.of(BookingStatus.REJECTED, BookingStatus.CANCELED),
+                                    Sort.by(Sort.Direction.DESC, "start"))
+                            .stream()
+                            .map(mapper::mapToBookingDto)
+                            .collect(Collectors.toList());
             case PAST -> bookingRepository.findUserBookings(userId, Sort.by(Sort.Direction.DESC, "start"))
                     .stream()
                     .filter(booking -> booking.getEnd().isBefore(now)

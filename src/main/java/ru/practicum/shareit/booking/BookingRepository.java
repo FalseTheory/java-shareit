@@ -38,8 +38,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "from Booking as b " +
             "join b.item as it " +
             "join it.owner as o " +
-            "where o.id = ?1 and b.status = ?2")
-    List<Booking> findOwnerBookings(Long userId, BookingState state, Sort sort);
+            "where o.id = ?1 and b.status in ?2")
+    List<Booking> findOwnerBookings(Long userId, List<BookingStatus> state, Sort sort);
 
 
     @Query("select b " +
@@ -60,9 +60,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b " +
             "from Booking as b " +
             "join b.booker as bkr " +
-            "where bkr.id = ?1 and b.status = ?2")
+            "where bkr.id = ?1 and b.status in ?2")
     @EntityGraph(attributePaths = {"item", "item.owner", "booker"})
-    List<Booking> findUserBookings(Long userId, BookingState state, Sort sort);
+    List<Booking> findUserBookings(Long userId, List<BookingStatus> state, Sort sort);
 
 
 }

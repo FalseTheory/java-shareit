@@ -24,6 +24,7 @@ public class Booking {
     @JoinColumn(name = "booker_id")
     User booker;
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     BookingStatus status;
     @Column(nullable = false, name = "start_time")
     LocalDateTime start;
