@@ -34,6 +34,13 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponseDto forbiddenException(final ForbiddenException e) {
+        log.info("Forbidden Exception {}", e.getMessage());
+        return new ErrorResponseDto("forbidden exception", e.getMessage());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponseDto handleUnexpectedException(final Exception e) {
         log.warn("Непредвиденная ошибка", e);
