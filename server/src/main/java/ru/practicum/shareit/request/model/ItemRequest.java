@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "requests")
@@ -24,4 +26,6 @@ public class ItemRequest {
     String description;
     @Column(nullable = false)
     LocalDateTime created;
+    @OneToMany(mappedBy = "request")
+    List<Item> items;
 }

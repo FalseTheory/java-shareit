@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
 
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -14,8 +13,10 @@ import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
+import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.UnavailableException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
@@ -42,7 +43,7 @@ public class BookingServiceImpl implements BookingService {
         User booker = userRepository.findById(bookingCreateDto.getBookerId())
                 .orElseThrow(() -> new NotFoundException("Пользователя с id - " + bookingCreateDto.getBookerId() + " не найдено"));
         if (!item.getAvailable()) {
-            throw new ValidationException("Предмет c id " + item.getId() + " не доступен для бронирования.");
+            throw new UnavailableException("Предмет c id " + item.getId() + " не доступен для бронирования.");
         }
         Booking booking = mapper.mapCreateDtoToBooking(bookingCreateDto);
 

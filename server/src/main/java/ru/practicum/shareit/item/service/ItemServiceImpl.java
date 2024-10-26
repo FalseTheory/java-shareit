@@ -1,13 +1,15 @@
 package ru.practicum.shareit.item.service;
 
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
+import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.UnavailableException;
 import ru.practicum.shareit.item.comment.Comment;
 import ru.practicum.shareit.item.comment.CommentMapper;
 import ru.practicum.shareit.item.comment.CommentRepository;
@@ -19,6 +21,8 @@ import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -33,6 +37,7 @@ public class ItemServiceImpl implements ItemService {
 
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final ItemRequestRepository itemRequestRepository;
     private final CommentRepository commentRepository;
     private final BookingRepository bookingRepository;
     private final ItemMapper itemMapper;
@@ -43,9 +48,15 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto create(ItemCreateDto itemDto) {
         User user = userRepository.findById(itemDto.getOwnerId())
                 .orElseThrow(() -> new NotFoundException("Пользователь с id - " + itemDto.getOwnerId() + " не найден"));
+        ItemRequest request = null;
+        if(itemDto.getRequestId()!=null) {
+            request = itemRequestRepository.findById(itemDto.getRequestId())
+                    .orElseThrow(()->new NotFoundException("Запрос с id - " + itemDto.getRequestId() + " не найден"));
+        }
 
         Item item = itemMapper.mapCreateDtoToItem(itemDto);
         item.setOwner(user);
+        item.setRequest(request);
         return itemMapper.mapToItemDto(itemRepository.save(item));
     }
 
@@ -137,7 +148,7 @@ public class ItemServiceImpl implements ItemService {
                 .noneMatch(booking -> booking.getItem().getId().equals(item.getId())
                         && booking.getStatus() == BookingStatus.APPROVED
                         && booking.getEnd().isBefore(now))) {
-            throw new ValidationException("Пользователь не брал в аренду предмет с id - " + item.getId()
+            throw new UnavailableException("Пользователь не брал в аренду предмет с id - " + item.getId()
                     + " или аренда еще не завершилась");
         }
 

@@ -18,6 +18,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <name>shareit-gateway</name>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

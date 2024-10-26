@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 
@@ -23,4 +24,7 @@ public class Item {
     User owner;
     @Column(nullable = false)
     Boolean available;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    ItemRequest request;
 }

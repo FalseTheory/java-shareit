@@ -1,11 +1,11 @@
 package ru.practicum.shareit.exception;
 
-import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 
 
 @RestControllerAdvice
@@ -20,17 +20,17 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponseDto conflictException(final ConflictException e) {
-        log.info("Conflicting data {}", e.getMessage());
+    @ResponseStatus
+    public ErrorResponseDto unavailableException(final UnavailableException e) {
+        log.info("Bad Request {}", e.getMessage());
         return new ErrorResponseDto("error", e.getMessage());
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponseDto validationException(final ValidationException e) {
-        log.info("Validation Exception {}", e.getMessage());
-        return new ErrorResponseDto("validation error", e.getMessage());
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto conflictException(final ConflictException e) {
+        log.info("Conflicting data {}", e.getMessage());
+        return new ErrorResponseDto("error", e.getMessage());
     }
 
     @ExceptionHandler

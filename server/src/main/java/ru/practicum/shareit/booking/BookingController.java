@@ -1,7 +1,5 @@
 package ru.practicum.shareit.booking;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +19,7 @@ public class BookingController {
 
     @PostMapping
     public BookingDto bookItem(@RequestHeader("X-Sharer-User-Id") Long userId,
-                               @RequestBody @Valid BookingCreateDto bookingCreateDto) {
+                               @RequestBody BookingCreateDto bookingCreateDto) {
 
         log.info("creating booking - {}", bookingCreateDto);
         bookingCreateDto.setBookerId(userId);
@@ -32,7 +30,7 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     public BookingDto getBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                 @PathVariable @Positive Long bookingId) {
+                                 @PathVariable Long bookingId) {
         log.info("getting booking with id - {}, for user - {}", bookingId, userId);
         return bookingService.getBooking(userId, bookingId);
     }
@@ -53,7 +51,7 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingDto processBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                     @PathVariable @Positive Long bookingId,
+                                     @PathVariable Long bookingId,
                                      @RequestParam boolean approved) {
         log.info("processing booking with id - {} by user - {}, approved - {}", bookingId, userId, approved);
         BookingDto bookingDto = bookingService.processBooking(userId, bookingId, approved);

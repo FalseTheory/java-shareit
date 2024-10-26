@@ -1,7 +1,5 @@
 package ru.practicum.shareit.item;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +23,11 @@ public class ItemController {
 
     @PostMapping
     public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") Long userId,
-                              @Valid @RequestBody ItemCreateDto itemCreateDto) {
+                              @RequestBody ItemCreateDto itemCreateDto,
+                              @RequestParam(required = false) Long requestId) {
         log.info("trying to create item - {} for user - {}", itemCreateDto, userId);
         itemCreateDto.setOwnerId(userId);
+        itemCreateDto.setRequestId(requestId);
         ItemDto itemDto = itemService.create(itemCreateDto);
         log.info("item created successfully");
         return itemDto;
@@ -35,7 +35,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDto getItemById(@RequestHeader("X-Sharer-User-Id") Long userId,
-                               @Positive @PathVariable Long itemId) {
+                               @PathVariable Long itemId) {
         log.info("getting item with id - {}", itemId);
         return itemService.getById(itemId, userId);
     }
@@ -43,7 +43,7 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                               @RequestBody ItemUpdateDto itemUpdateDto,
-                              @Positive @PathVariable Long itemId) {
+                              @PathVariable Long itemId) {
         log.info("trying to update item with id - {}, new item - {}", itemId, itemUpdateDto);
         itemUpdateDto.setId(itemId);
         itemUpdateDto.setOwnerId(userId);
@@ -69,8 +69,8 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public CommentDto postComment(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                  @PathVariable @Positive Long itemId,
-                                  @Valid @RequestBody CommentCreateDto commentCreateDto) {
+                                  @PathVariable Long itemId,
+                                  @RequestBody CommentCreateDto commentCreateDto) {
         commentCreateDto.setItemId(itemId);
         commentCreateDto.setUserId(userId);
         return itemService.postComment(commentCreateDto);
