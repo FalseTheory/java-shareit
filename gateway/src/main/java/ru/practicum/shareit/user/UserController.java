@@ -12,8 +12,6 @@ import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
 
 
-
-
 @Controller
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     public ResponseEntity<Object> update(@Positive @PathVariable Long userId,
-                          @Valid @RequestBody UserUpdateDto userUpdateDto) {
+                                         @Valid @RequestBody UserUpdateDto userUpdateDto) {
         return userClient.update(userId, userUpdateDto);
     }
 

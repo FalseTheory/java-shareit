@@ -23,11 +23,9 @@ public class ItemController {
 
     @PostMapping
     public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") Long userId,
-                              @RequestBody ItemCreateDto itemCreateDto,
-                              @RequestParam(required = false) Long requestId) {
+                              @RequestBody ItemCreateDto itemCreateDto) {
         log.info("trying to create item - {} for user - {}", itemCreateDto, userId);
         itemCreateDto.setOwnerId(userId);
-        itemCreateDto.setRequestId(requestId);
         ItemDto itemDto = itemService.create(itemCreateDto);
         log.info("item created successfully");
         return itemDto;

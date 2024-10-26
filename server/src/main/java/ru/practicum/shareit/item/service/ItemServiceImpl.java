@@ -3,11 +3,9 @@ package ru.practicum.shareit.item.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
-import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.UnavailableException;
 import ru.practicum.shareit.item.comment.Comment;
@@ -49,9 +47,9 @@ public class ItemServiceImpl implements ItemService {
         User user = userRepository.findById(itemDto.getOwnerId())
                 .orElseThrow(() -> new NotFoundException("Пользователь с id - " + itemDto.getOwnerId() + " не найден"));
         ItemRequest request = null;
-        if(itemDto.getRequestId()!=null) {
+        if (itemDto.getRequestId() != null) {
             request = itemRequestRepository.findById(itemDto.getRequestId())
-                    .orElseThrow(()->new NotFoundException("Запрос с id - " + itemDto.getRequestId() + " не найден"));
+                    .orElseThrow(() -> new NotFoundException("Запрос с id - " + itemDto.getRequestId() + " не найден"));
         }
 
         Item item = itemMapper.mapCreateDtoToItem(itemDto);

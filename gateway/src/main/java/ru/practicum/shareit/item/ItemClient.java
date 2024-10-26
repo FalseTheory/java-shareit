@@ -28,6 +28,7 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> createItem(long userId, ItemCreateDto itemCreateDto) {
+
         return post("", userId, itemCreateDto);
     }
 
@@ -36,7 +37,7 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> updateItem(long userId, ItemUpdateDto itemUpdateDto, long itemId) {
-        return patch("/"+itemId, userId, itemUpdateDto);
+        return patch("/" + itemId, userId, itemUpdateDto);
     }
 
     public ResponseEntity<Object> getItemsForUser(long userId) {
@@ -47,13 +48,12 @@ public class ItemClient extends BaseClient {
         Map<String, Object> parameters = Map.of(
                 "text", text
         );
-        return get("/search?text={text}",userId, parameters);
+        return get("/search?text={text}", userId, parameters);
     }
 
     public ResponseEntity<Object> postComment(long userId, long itemId, CommentCreateDto commentCreateDto) {
-        return post("/"+itemId + "/comment", userId, commentCreateDto);
+        return post("/" + itemId + "/comment", userId, commentCreateDto);
     }
-
 
 
 }

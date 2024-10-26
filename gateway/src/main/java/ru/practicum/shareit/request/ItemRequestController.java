@@ -8,9 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
 
-import java.util.List;
 
 @Controller
 @RequestMapping(path = "/requests")
@@ -22,7 +20,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ResponseEntity<Object> addRequest(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                     @RequestBody @Valid ItemRequestCreateDto itemRequestCreateDto) {
+                                             @RequestBody @Valid ItemRequestCreateDto itemRequestCreateDto) {
 
         return client.addRequest(userId, itemRequestCreateDto);
     }
@@ -38,8 +36,8 @@ public class ItemRequestController {
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<Object> getRequest(@PathVariable @Positive Long id) {
-        return client.getRequest(id);
+    public ResponseEntity<Object> getRequest(@PathVariable @Positive Long requestId) {
+        return client.getRequest(requestId);
     }
 
- }
+}

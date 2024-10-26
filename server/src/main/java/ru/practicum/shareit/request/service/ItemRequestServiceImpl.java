@@ -24,6 +24,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     private final UserRepository userRepository;
     private final ItemRequestMapper itemRequestMapper;
     private final ItemMapper itemMapper;
+
     @Override
     @Transactional
     public ItemRequestDto add(Long userId, ItemRequestCreateDto itemRequestCreateDto) {
@@ -62,7 +63,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public ItemRequestDto get(Long id) {
 
         ItemRequest itemRequest = requestRepository.findById(id)
-                .orElseThrow(()->new NotFoundException("Запрос с id - " + id + " не найден"));
+                .orElseThrow(() -> new NotFoundException("Запрос с id - " + id + " не найден"));
 
         return itemRequestMapper.mapToItemRequestDto(itemRequest,
                 itemRequest.getItems().stream().map(itemMapper::mapToItemDto).toList());
