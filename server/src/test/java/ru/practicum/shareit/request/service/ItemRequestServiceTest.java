@@ -67,7 +67,7 @@ class ItemRequestServiceTest {
     @DisplayName("Список всех запросов пользователя должен корректно возвращаться")
     void getAllUserRequestTest() {
 
-        List<ItemRequestDto> userRequests = service.getAllUserRequest(request1.getOwner_id());
+        List<ItemRequestDto> userRequests = service.getAllUserRequest(request1.getOwnerId());
 
         Assertions.assertEquals(userRequests, allRequests);
 
@@ -76,7 +76,7 @@ class ItemRequestServiceTest {
                 "join rq.owner as o " +
                 "where o.id = :id";
         TypedQuery<ItemRequest> query = em.createQuery(USER_REQUESTS_QUERY, ItemRequest.class);
-        query.setParameter("id", request1.getOwner_id());
+        query.setParameter("id", request1.getOwnerId());
 
         Assertions.assertEquals(userRequests, query.getResultList().stream()
                 .map(itemRequest -> mapper.mapToItemRequestDto(itemRequest, null)).toList());
@@ -89,9 +89,9 @@ class ItemRequestServiceTest {
     @DisplayName("Список всех запросов должен быть корректным")
     void getAllRequestsTest() {
 
-        service.add(request1.getOwner_id(), createDto);
+        service.add(request1.getOwnerId(), createDto);
 
-        List<ItemRequestDto> userRequests = service.getAllUserRequest(request1.getOwner_id());
+        List<ItemRequestDto> userRequests = service.getAllUserRequest(request1.getOwnerId());
 
 
         TypedQuery<ItemRequest> query = em.createQuery("select r from ItemRequest as r", ItemRequest.class);

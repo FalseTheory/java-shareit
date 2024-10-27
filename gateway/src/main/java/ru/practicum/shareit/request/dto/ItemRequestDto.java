@@ -9,11 +9,8 @@ import java.util.List;
 @Data
 public class ItemRequestDto {
     Long id;
-
-    Long owner_id;
+    Long ownerId;
     String description;
-
     LocalDateTime created;
-
     List<ItemDto> items;
 }
