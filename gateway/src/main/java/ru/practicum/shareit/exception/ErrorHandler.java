@@ -23,7 +23,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponseDto MethodArgumentValidationException(final MethodArgumentNotValidException e) {
+    public ErrorResponseDto methodArgumentValidationException(final MethodArgumentNotValidException e) {
         log.info("Validation Exception {}", e.getMessage());
         return new ErrorResponseDto("validation error", e.getMessage());
     }
