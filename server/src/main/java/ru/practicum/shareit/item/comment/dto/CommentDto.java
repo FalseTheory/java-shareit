@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CommentDto {
     Long id;
     String text;
