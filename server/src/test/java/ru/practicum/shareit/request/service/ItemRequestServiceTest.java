@@ -55,8 +55,8 @@ class ItemRequestServiceTest {
         ItemRequestDto created = service.add(3L, createDto);
 
 
-        TypedQuery<ItemRequest> query = em.createQuery("select r from ItemRequest r where r.id=:id"
-                , ItemRequest.class);
+        TypedQuery<ItemRequest> query = em.createQuery("select r from ItemRequest r where r.id=:id",
+                ItemRequest.class);
         query.setParameter("id", created.getId());
 
         Assertions.assertEquals(created, mapper.mapToItemRequestDto(query.getSingleResult(), null));
@@ -71,11 +71,11 @@ class ItemRequestServiceTest {
 
         Assertions.assertEquals(userRequests, allRequests);
 
-        String USER_REQUESTS_QUERY = "select rq " +
+        String queryString = "select rq " +
                 "from ItemRequest as rq " +
                 "join rq.owner as o " +
                 "where o.id = :id";
-        TypedQuery<ItemRequest> query = em.createQuery(USER_REQUESTS_QUERY, ItemRequest.class);
+        TypedQuery<ItemRequest> query = em.createQuery(queryString, ItemRequest.class);
         query.setParameter("id", request1.getOwnerId());
 
         Assertions.assertEquals(userRequests, query.getResultList().stream()
@@ -107,8 +107,8 @@ class ItemRequestServiceTest {
         ItemRequestDto requestDto = service.get(request1.getId());
 
 
-        TypedQuery<ItemRequest> query = em.createQuery("select r from ItemRequest r where r.id=:id"
-                , ItemRequest.class);
+        TypedQuery<ItemRequest> query = em.createQuery("select r from ItemRequest r where r.id=:id",
+                ItemRequest.class);
         query.setParameter("id", requestDto.getId());
 
         Assertions.assertEquals(requestDto, mapper.mapToItemRequestDto(query.getSingleResult(), new ArrayList<>()));

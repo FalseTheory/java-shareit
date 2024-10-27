@@ -83,7 +83,7 @@ class BookingServiceTest {
     @Test
     @Rollback
     @DisplayName("Тесты ошибок NotFound и Unavailable")
-    void UnavailableAndNotFoundTest() {
+    void unavailableAndNotFoundTest() {
 
 
         createDto.setItemId(2L);

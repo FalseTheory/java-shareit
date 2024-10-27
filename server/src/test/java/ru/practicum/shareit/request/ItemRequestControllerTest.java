@@ -57,7 +57,7 @@ class ItemRequestControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.owner_id").value(request.getOwnerId()))
+                .andExpect(jsonPath("$.ownerId").value(request.getOwnerId()))
                 .andExpect(jsonPath("$.description").value(request.getDescription()))
                 .andExpect(jsonPath("$.created").doesNotExist())
                 .andExpect(jsonPath("$.items").doesNotExist());
@@ -104,7 +104,7 @@ class ItemRequestControllerTest {
                         .header("X-Sharer-User-Id", userId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.owner_id").value(request.getOwnerId()))
+                .andExpect(jsonPath("$.ownerId").value(request.getOwnerId()))
                 .andExpect(jsonPath("$.description").value(request.getDescription()))
                 .andExpect(jsonPath("$.created").doesNotExist())
                 .andExpect(jsonPath("$.items").doesNotExist());

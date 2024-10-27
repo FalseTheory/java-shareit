@@ -102,7 +102,7 @@ class ItemServiceTest {
     @Test
     @Rollback
     @DisplayName("Тесты исключений")
-    void ExceptionsTest() {
+    void exceptionsTest() {
         CommentCreateDto commentCreateDto = new CommentCreateDto(
                 "desc",
                 2L,
@@ -125,8 +125,8 @@ class ItemServiceTest {
                 Booking.class);
         queryB.setParameter("id", itemDto.getId());
 
-        Assertions.assertEquals(itemDto, mapper.mapToItemDto(query.getSingleResult()
-                , queryB.getResultList(), new ArrayList<>()));
+        Assertions.assertEquals(itemDto, mapper.mapToItemDto(query.getSingleResult(),
+                queryB.getResultList(), new ArrayList<>()));
     }
 
     @Test
@@ -172,12 +172,12 @@ class ItemServiceTest {
         long item2UserId = 2L;
         List<ItemDto> searchList = service.searchAvailableItems(item2UserId, searchString);
 
-        String SEARCH_QUERY = "select it " +
+        String searchQuery = "select it " +
                 "from Item as it " +
                 "join it.owner as o " +
                 "where o.id != :id and it.available = TRUE " +
                 "and (LOWER(it.name) like LOWER(:text) or LOWER(it.description) like LOWER(:text))";
-        TypedQuery<Item> query = em.createQuery(SEARCH_QUERY, Item.class);
+        TypedQuery<Item> query = em.createQuery(searchQuery, Item.class);
         query.setParameter("id", item2UserId);
         query.setParameter("text", searchString);
 
