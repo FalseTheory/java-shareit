@@ -8,8 +8,7 @@ import ru.practicum.shareit.user.dto.UserBookerDto;
 import java.time.LocalDateTime;
 
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor @AllArgsConstructor
 public class BookingDto {
     Long id;

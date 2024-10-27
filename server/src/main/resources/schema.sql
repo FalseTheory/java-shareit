@@ -40,13 +40,13 @@ CREATE TABLE IF NOT EXISTS requests (
 
 
 
-ALTER TABLE items ADD CONSTRAINT "items_fk4" FOREIGN KEY ("owner_id") REFERENCES "users"("id");
+ALTER TABLE items ADD CONSTRAINT "items_fk4" FOREIGN KEY ("owner_id") REFERENCES "users"("id") ON DELETE CASCADE;
 ALTER TABLE comments ADD CONSTRAINT "comments_fk1" FOREIGN KEY ("item_id") REFERENCES "items"("id");
 
-ALTER TABLE comments ADD CONSTRAINT "comments_fk3" FOREIGN KEY ("author_id") REFERENCES "users"("id");
-ALTER TABLE bookings ADD CONSTRAINT "bookings_fk4" FOREIGN KEY ("booker_id") REFERENCES "users"("id");
+ALTER TABLE comments ADD CONSTRAINT "comments_fk3" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE CASCADE;
+ALTER TABLE bookings ADD CONSTRAINT "bookings_fk4" FOREIGN KEY ("booker_id") REFERENCES "users"("id") ON DELETE CASCADE;
 
 ALTER TABLE bookings ADD CONSTRAINT "bookings_fk5" FOREIGN KEY ("item_id") REFERENCES "items"("id");
-ALTER TABLE requests ADD CONSTRAINT "requests_fk1" FOREIGN KEY ("owner_id") REFERENCES "users"("id");
+ALTER TABLE requests ADD CONSTRAINT "requests_fk1" FOREIGN KEY ("owner_id") REFERENCES "users"("id") ON DELETE CASCADE;
 
 ALTER TABLE items ADD CONSTRAINT "items_fk5" FOREIGN KEY ("request_id") REFERENCES "requests"("id");

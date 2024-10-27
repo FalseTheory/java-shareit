@@ -7,7 +7,6 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.time.LocalDateTime;
@@ -29,9 +28,6 @@ public interface ItemMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "owner", ignore = true)
     Item mapCreateDtoToItem(ItemCreateDto itemDto);
-
-    @Mapping(target = "owner", ignore = true)
-    Item mapUpdateDtoToItem(ItemUpdateDto itemUpdateDto);
 
 
     default ItemDto.BookingShortDto getNextBooking(List<Booking> bookings) {
