@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.mapper.ItemRequestMapper;
@@ -29,13 +31,13 @@ class ItemRequestServiceTest {
     private final ItemRequestService service;
     private final ItemRequestMapper mapper;
 
-
     private final ItemRequestDto request1 = new ItemRequestDto(
             1L,
             3L,
             "need nice item",
             LocalDateTime.of(2023, 1, 1, 0, 0, 0),
-            new ArrayList<>()
+            List.of(new ItemDto(3L, "item3", "desc3",
+                    true, null, null, null))
     );
     private final ItemRequestDto request2 = new ItemRequestDto(
             2L,
@@ -67,6 +69,7 @@ class ItemRequestServiceTest {
     @DisplayName("Список всех запросов пользователя должен корректно возвращаться")
     void getAllUserRequestTest() {
 
+
         List<ItemRequestDto> userRequests = service.getAllUserRequest(request1.getOwnerId());
 
         Assertions.assertEquals(userRequests, allRequests);
@@ -79,7 +82,7 @@ class ItemRequestServiceTest {
         query.setParameter("id", request1.getOwnerId());
 
         Assertions.assertEquals(userRequests, query.getResultList().stream()
-                .map(itemRequest -> mapper.mapToItemRequestDto(itemRequest, new ArrayList<>())).toList());
+                .map(itemRequest -> mapper.mapToItemRequestDto(itemRequest, itemRequest.getItems())).toList());
 
 
     }
@@ -89,15 +92,14 @@ class ItemRequestServiceTest {
     @DisplayName("Список всех запросов должен быть корректным")
     void getAllRequestsTest() {
 
-        service.add(request1.getOwnerId(), createDto);
 
-        List<ItemRequestDto> userRequests = service.getAllUserRequest(request1.getOwnerId());
+        List<ItemRequestDto> allRequests1 = service.getAllRequests();
 
 
         TypedQuery<ItemRequest> query = em.createQuery("select r from ItemRequest as r", ItemRequest.class);
 
-        Assertions.assertEquals(userRequests, query.getResultList().stream()
-                .map(itemRequest -> mapper.mapToItemRequestDto(itemRequest, new ArrayList<>())).toList());
+        Assertions.assertEquals(allRequests1, query.getResultList().stream()
+                .map(itemRequest -> mapper.mapToItemRequestDto(itemRequest, itemRequest.getItems())).toList());
     }
 
     @Test
@@ -111,6 +113,8 @@ class ItemRequestServiceTest {
                 ItemRequest.class);
         query.setParameter("id", requestDto.getId());
 
-        Assertions.assertEquals(requestDto, mapper.mapToItemRequestDto(query.getSingleResult(), new ArrayList<>()));
+        ItemRequest request = query.getSingleResult();
+
+        Assertions.assertEquals(requestDto, mapper.mapToItemRequestDto(request, request.getItems()));
     }
 }

@@ -78,6 +78,15 @@ class ItemServiceTest {
             2L,
             6L
     );
+    final ItemDto newItemForRequest = new ItemDto(
+            3L,
+            "item3",
+            "desc3",
+            true,
+            new ArrayList<>(),
+            null,
+            null
+    );
     private final ItemUpdateDto updateDto = new ItemUpdateDto(
             item1.getId(),
             item1UserId,
@@ -85,7 +94,7 @@ class ItemServiceTest {
             "updatedDesc",
             false
     );
-    private final List<ItemDto> allItems = List.of(item1, item2);
+    private final List<ItemDto> allItems = List.of(item1, item2, newItemForRequest);
 
     @Test
     @Rollback
@@ -94,7 +103,7 @@ class ItemServiceTest {
         ItemDto itemDto = service.create(newItem);
 
         TypedQuery<Item> query = em.createQuery("Select i from Item i where i.id=:id", Item.class);
-        query.setParameter("id", 3L);
+        query.setParameter("id", allItems.size() + 1);
 
         Assertions.assertEquals(itemDto, mapper.mapToItemDto(query.getSingleResult()));
     }

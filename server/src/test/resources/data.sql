@@ -20,3 +20,6 @@ insert into requests("owner_id", "description", "created")
 values('3','need nice item','2023-01-01 00:00:00');
 insert into requests("owner_id", "description", "created")
 values('3','need more items','2023-02-01 00:00:00');
+
+insert into items("name","description","available","owner_id","request_id")
+values('item3','desc3','true','2','1');

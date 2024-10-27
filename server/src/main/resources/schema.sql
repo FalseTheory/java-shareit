@@ -49,4 +49,4 @@ ALTER TABLE bookings ADD CONSTRAINT "bookings_fk4" FOREIGN KEY ("booker_id") REF
 ALTER TABLE bookings ADD CONSTRAINT "bookings_fk5" FOREIGN KEY ("item_id") REFERENCES "items"("id");
 ALTER TABLE requests ADD CONSTRAINT "requests_fk1" FOREIGN KEY ("owner_id") REFERENCES "users"("id") ON DELETE CASCADE;
 
-ALTER TABLE items ADD CONSTRAINT "items_fk5" FOREIGN KEY ("request_id") REFERENCES "requests"("id");
+ALTER TABLE items ADD CONSTRAINT "items_fk5" FOREIGN KEY ("request_id") REFERENCES "requests"("id") ON DELETE CASCADE;
