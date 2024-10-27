@@ -26,6 +26,6 @@ public class ItemRequest {
     String description;
     @Column(nullable = false)
     LocalDateTime created;
-    @OneToMany(mappedBy = "request")
+    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)
     List<Item> items;
 }

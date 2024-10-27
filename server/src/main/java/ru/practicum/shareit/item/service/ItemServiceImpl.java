@@ -118,7 +118,7 @@ public class ItemServiceImpl implements ItemService {
             }
         }
 
-        return itemRepository.getUserItems(userId).stream()
+        return items.stream()
                 .map(item -> itemMapper.mapToItemDto(item, bookingsMap.get(item.getId()), commentList))
                 .toList();
     }

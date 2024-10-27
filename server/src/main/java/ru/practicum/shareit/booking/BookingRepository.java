@@ -53,7 +53,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "from Booking as b " +
             "join b.booker as bkr " +
             "where bkr.id = ?1")
-    @EntityGraph(attributePaths = {"item", "item.owner", "booker"})
+    @EntityGraph(attributePaths = {"item", "item.owner"})
     List<Booking> findUserBookings(Long userId);
 
 

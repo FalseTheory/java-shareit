@@ -13,7 +13,6 @@ import ru.practicum.shareit.item.comment.dto.CommentCreateDto;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.nio.charset.StandardCharsets;
@@ -35,16 +34,16 @@ class ItemControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
-    private long userId = 1L;
+    private final long userId = 1L;
 
-    private ItemCreateDto newItem = new ItemCreateDto(
+    private final ItemCreateDto newItem = new ItemCreateDto(
             "name",
             "desc",
             true,
             1L,
             1L
     );
-    private ItemDto item = new ItemDto(
+    private final ItemDto item = new ItemDto(
             1L,
             "name",
             "desc",
@@ -53,7 +52,6 @@ class ItemControllerTest {
             null,
             null
     );
-    private ItemUpdateDto updateDto = new ItemUpdateDto();
 
     @Test
     @DisplayName("Эндпоинт POST /items должен корректно работать")

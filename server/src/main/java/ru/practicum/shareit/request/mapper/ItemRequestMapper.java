@@ -3,7 +3,7 @@ package ru.practicum.shareit.request.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -20,6 +20,12 @@ public interface ItemRequestMapper {
     ItemRequest mapCreateDtoToItemRequest(ItemRequestCreateDto itemRequestCreateDto);
 
     @Mapping(target = "ownerId", source = "itemRequest.owner.id")
-    @Mapping(target = "items", source = "itemDtoList")
-    ItemRequestDto mapToItemRequestDto(ItemRequest itemRequest, List<ItemDto> itemDtoList);
+    @Mapping(target = "items", source = "itemList")
+    ItemRequestDto mapToItemRequestDto(ItemRequest itemRequest, List<Item> itemList);
+
+    @Mapping(target = "ownerId", source = "ownerId")
+    @Mapping(target = "items", source = "itemList")
+    ItemRequestDto mapToItemRequestDto(ItemRequest itemRequest, List<Item> itemList, Long ownerId);
+
+
 }

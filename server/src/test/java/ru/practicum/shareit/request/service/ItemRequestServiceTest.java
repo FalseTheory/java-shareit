@@ -35,14 +35,14 @@ class ItemRequestServiceTest {
             3L,
             "need nice item",
             LocalDateTime.of(2023, 1, 1, 0, 0, 0),
-            null
+            new ArrayList<>()
     );
     private final ItemRequestDto request2 = new ItemRequestDto(
             2L,
             3L,
             "need more items",
             LocalDateTime.of(2023, 2, 1, 0, 0, 0),
-            null
+            new ArrayList<>()
     );
     private final List<ItemRequestDto> allRequests = List.of(request1, request2);
     private final ItemRequestCreateDto createDto = new ItemRequestCreateDto("new request");
@@ -79,7 +79,7 @@ class ItemRequestServiceTest {
         query.setParameter("id", request1.getOwnerId());
 
         Assertions.assertEquals(userRequests, query.getResultList().stream()
-                .map(itemRequest -> mapper.mapToItemRequestDto(itemRequest, null)).toList());
+                .map(itemRequest -> mapper.mapToItemRequestDto(itemRequest, new ArrayList<>())).toList());
 
 
     }
@@ -97,7 +97,7 @@ class ItemRequestServiceTest {
         TypedQuery<ItemRequest> query = em.createQuery("select r from ItemRequest as r", ItemRequest.class);
 
         Assertions.assertEquals(userRequests, query.getResultList().stream()
-                .map(itemRequest -> mapper.mapToItemRequestDto(itemRequest, null)).toList());
+                .map(itemRequest -> mapper.mapToItemRequestDto(itemRequest, new ArrayList<>())).toList());
     }
 
     @Test

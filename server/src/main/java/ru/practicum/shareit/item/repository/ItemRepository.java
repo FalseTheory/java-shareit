@@ -27,4 +27,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "where o.id != ?1 and it.available = TRUE " +
             "and (LOWER(it.name) like LOWER(?2) or LOWER(it.description) like LOWER(?2))")
     List<Item> search(Long userId, String text);
+
+    @Query("select it " +
+            "from Item as it " +
+            "join it.request as r " +
+            "where r IS NOT NULL")
+    List<Item> getAllItemsForRequests();
 }
