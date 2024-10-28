@@ -33,4 +33,11 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "join it.request as r " +
             "where r IS NOT NULL")
     List<Item> getAllItemsForRequests();
+
+
+    @Query("select it " +
+            "from Item as it " +
+            "join it.request as r " +
+            "where r.id IN ?1")
+    List<Item> getAllItemsForUserRequests(List<Long> ids);
 }

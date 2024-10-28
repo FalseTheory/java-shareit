@@ -47,9 +47,10 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public List<ItemRequestDto> getAllUserRequest(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id - " + userId + " не найден"));
-        List<Item> itemsForRequests = itemRepository.getAllItemsForRequests();
+
         List<ItemRequest> requests = requestRepository.findAllUserRequests(userId);
         List<Long> ids = requests.stream().map(ItemRequest::getId).toList();
+        List<Item> itemsForRequests = itemRepository.getAllItemsForUserRequests(ids);
         Map<Long, List<Item>> itemMap = new HashMap<>();
 
         for (Long id : ids) {
@@ -57,9 +58,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         }
         for (Item item : itemsForRequests) {
             Long id = item.getRequest().getId();
-            if (ids.contains(id)) {
-                itemMap.get(id).add(item);
-            }
+            itemMap.get(id).add(item);
         }
 
 
@@ -82,9 +81,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         }
         for (Item item : itemsForRequests) {
             Long id = item.getRequest().getId();
-            if (ids.contains(id)) {
-                itemMap.get(id).add(item);
-            }
+            itemMap.get(id).add(item);
         }
 
         return requests.stream()
